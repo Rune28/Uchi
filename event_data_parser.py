@@ -62,7 +62,6 @@ client = Client(host='localhost')
 
 string_cols = str(tuple(columns)).replace("'",'')
 
-string_cols = str(tuple(columns)).replace("'",'')
 
 def restructure(d):
     d = dict(sorted(d.items()))
@@ -72,16 +71,9 @@ for each in tqdm.tqdm(file_buffer):
     if each:
         line = json.loads(each)
         fullfiled = { **fullfill,**line}
-        list_structure.append(restructure(fullfiled))
-        if len(list_structure)==199:
-            client.execute(
-                            'INSERT INTO Dbreport.RawData {}'.format(string_cols),
-                                                list_structure
-                          )
-            list_structure = []
-        else:
-            pass
+        client.execute(
+                        'INSERT INTO Dbreport.RawData {} VALUES'.format(string_cols),
+                                            fullfiled
+                      )
     else:
         pass
-
-
