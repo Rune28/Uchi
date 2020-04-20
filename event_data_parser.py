@@ -11,6 +11,7 @@ from clickhouse_driver import Client
 import os
 
 path = os.getcwd()
+print(path)
 
 file = '\event-data.json'
 
