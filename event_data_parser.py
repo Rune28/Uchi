@@ -18,7 +18,7 @@ file = '/event-data.json'
 with open(path+file,'r', encoding = 'utf-8') as fh:
     file_buffer = fh.read().split('\n')
 
-columns = {'artist',
+columns = ['artist',
  'auth',
  'firstName',
  'gender',
@@ -35,7 +35,7 @@ columns = {'artist',
  'status',
  'ts',
  'userAgent',
- 'userId'}
+ 'userId']
 
 fullfill = dict(zip(
     list(columns),
@@ -67,15 +67,20 @@ def restructure(d):
     d = dict(sorted(d.items()))
     return d
 
+
+def tupling(d):
+    d = dict(sorted(d.items()))
+    print(d)
+    return tuple(d.values())
+
+
 for each in tqdm.tqdm(file_buffer):
     if each:
         line = json.loads(each)
-        fullfiled = restructure({ **fullfill,**line})
-        data_ch = [{x:y} for x,y in fullfiled.items()]
-        print(data_ch)
+        fullfiled = tupling({ **fullfill,**line})
         client.execute(
                         'INSERT INTO Dbreport.RawData {} VALUES'.format(string_cols),
-                                            data_ch
+                                            fullfiled
                       )
     else:
         pass
