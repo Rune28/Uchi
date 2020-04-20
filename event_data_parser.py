@@ -64,11 +64,34 @@ fullfill = dict(zip(
 #         if len(line.keys()) > len(columns):
 #             columns = set(line.keys())
 
-list_structure = []
 
 client = Client(host='localhost')
 
 string_cols = str(tuple(columns)).replace("'",'')
+
+#create table script
+
+# CREATE TABLE Dbreport.RawData (
+#   artist  String,
+#   auth  String,
+#   firstName  String,
+#   gender  String,
+#   itemInSession  UInt8,
+#   lastName  String,
+#   length  Float32,
+#   level  String,
+#   location  String,
+#   method  String,
+#   page  String,
+#   registration  String,
+#   sessionId  Int32,
+#   song  String,
+#   status  UInt8,
+#   ts  Int32,
+#   userAgent  String,
+#   userId  String
+# ) ENGINE = MergeTree()
+# ORDER BY ts
 
 
 
