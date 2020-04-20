@@ -72,6 +72,7 @@ for each in tqdm.tqdm(file_buffer):
         line = json.loads(each)
         fullfiled = restructure({ **fullfill,**line})
         data_ch = [{x:y} for x,y in fullfiled.items()]
+        print(data_ch)
         client.execute(
                         'INSERT INTO Dbreport.RawData {} VALUES'.format(string_cols),
                                             data_ch
