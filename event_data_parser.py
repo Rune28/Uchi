@@ -10,13 +10,18 @@ import tqdm
 from clickhouse_driver import Client
 import os
 
+
+#json path
 path = os.getcwd()
-print(path)
 
 file = '/event-data.json'
 
+print(path+file)
+
 with open(path+file,'r', encoding = 'utf-8') as fh:
     file_buffer = fh.read().split('\n')
+
+print('Done')
 
 columns = ['artist',
  'auth',
@@ -37,6 +42,9 @@ columns = ['artist',
  'userAgent',
  'userId']
 
+
+
+###if column isnt in row utofill as blanks
 fullfill = dict(zip(
     list(columns),
     ['' for x in range(len(columns))]
@@ -63,27 +71,19 @@ client = Client(host='localhost')
 string_cols = str(tuple(columns)).replace("'",'')
 
 
-def restructure(d):
-    d = dict(sorted(d.items()))
-    return d
-
 
 def tupling(d):
     d = dict(sorted(d.items()))
     return tuple(d.values())
 
 
-for each in tqdm.tqdm([file_buffer[1]]):
+for each in tqdm.tqdm(file_buffer):
     if each:
         line = json.loads(each)
         fullfiled = tupling({ **fullfill,**line})
-        tuple_prepared =tuple([x.replace("'",'')  if isinstance(x,str) else x for x in fullfiled])
-        if len(tuple_prepared)==len(columns):
-            client.execute(
-                            'INSERT INTO Dbreport.RawData {} VALUES'.format(string_cols),
-                            tuple_prepared
-                          )
-        else:
-            pass
+        client.execute(
+                        'INSERT INTO Dbreport.RawData {} VALUES'.format(string_cols),
+                        fullfiled
+                      )
     else:
         pass
