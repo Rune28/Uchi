@@ -39,7 +39,7 @@ columns = ['artist',
 
 fullfill = dict(zip(
     list(columns),
-    [None for x in range(len(columns))]
+    ['' for x in range(len(columns))]
     )
     )
 
@@ -70,7 +70,6 @@ def restructure(d):
 
 def tupling(d):
     d = dict(sorted(d.items()))
-    print(d)
     return tuple(d.values())
 
 
@@ -79,8 +78,7 @@ for each in tqdm.tqdm(file_buffer):
         line = json.loads(each)
         fullfiled = tupling({ **fullfill,**line})
         client.execute(
-                        'INSERT INTO Dbreport.RawData {} VALUES'.format(string_cols),
-                                            fullfiled
+                        'INSERT INTO Dbreport.RawData {} VALUES {}'.format(string_cols,fullfiled),
                       )
     else:
         pass
