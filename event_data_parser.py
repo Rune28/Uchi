@@ -73,7 +73,7 @@ for each in tqdm.tqdm(file_buffer):
         fullfiled = { **fullfill,**line}
         client.execute(
                         'INSERT INTO Dbreport.RawData {} VALUES'.format(string_cols),
-                                            fullfiled
+                                            [{x:y} for x,y in fullfiled.items()]
                       )
     else:
         pass
