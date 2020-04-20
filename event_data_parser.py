@@ -73,12 +73,12 @@ def tupling(d):
     return tuple(d.values())
 
 
-for each in tqdm.tqdm(file_buffer):
+for each in tqdm.tqdm([file_buffer[1]]):
     if each:
         line = json.loads(each)
         fullfiled = tupling({ **fullfill,**line})
         client.execute(
-                        'INSERT INTO Dbreport.RawData {} VALUES {}'.format(string_cols,fullfiled),
+                        r'INSERT INTO Dbreport.RawData {} VALUES {}'.format(string_cols,[x.replace("'",'') for x in fullfiled if isinstance(x,str)]),
                       )
     else:
         pass
