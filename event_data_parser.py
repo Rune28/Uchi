@@ -12,7 +12,7 @@ import os
 
 path = os.getcwd()
 
-file = 'event-data.json'
+file = '\event-data.json'
 
 with open(path+file,'r', encoding = 'utf-8') as fh:
     file_buffer = fh.read().split('\n')
