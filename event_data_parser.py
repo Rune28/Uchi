@@ -13,7 +13,7 @@ import os
 path = os.getcwd()
 print(path)
 
-file = '/event-data.json'
+file = '\event-data.json'
 
 with open(path+file,'r', encoding = 'utf-8') as fh:
     file_buffer = fh.read().split('\n')
@@ -58,6 +58,12 @@ fullfill = dict(zip(
 
 list_structure = []
 
+client = Client(host='localhost')
+
+string_cols = str(tuple(columns)).replace("'",'')
+
+string_cols = str(tuple(columns)).replace("'",'')
+
 def restructure(d):
     d = dict(sorted(d.items()))
     return tuple(d.values())
@@ -67,16 +73,15 @@ for each in tqdm.tqdm(file_buffer):
         line = json.loads(each)
         fullfiled = { **fullfill,**line}
         list_structure.append(restructure(fullfiled))
+        if len(list_structure)==199:
+            client.execute(
+                            'INSERT INTO Dbreport.RawData {}'.format(string_cols),
+                                                list_structure
+                          )
+            list_structure = []
+        else:
+            pass
     else:
         pass
 
 
-client = Client(host='localhost')
-client.execute('SHOW DATABASES')
-
-string_cols = str(tuple(columns)).replace("'",'')
-
-client.execute(
-    'INSERT INTO Dbreport.RawData {}'.format(string_cols),
-        list_structure
- )
