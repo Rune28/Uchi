@@ -78,8 +78,8 @@ for each in tqdm.tqdm([file_buffer[1]]):
         line = json.loads(each)
         fullfiled = tupling({ **fullfill,**line})
         client.execute(
-                        r'INSERT INTO Dbreport.RawData {} VALUES '.format(string_cols),
-                        tuple([x.replace("'",'') for x in fullfiled if isinstance(x,str)])
+                        'INSERT INTO Dbreport.RawData {} VALUES '.format(string_cols),
+                        tuple([x.replace("'",'')  if isinstance(x,str) else x for x in fullfiled])
                       )
     else:
         pass
