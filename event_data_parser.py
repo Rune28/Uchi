@@ -65,13 +65,12 @@ string_cols = str(tuple(columns)).replace("'",'')
 
 def restructure(d):
     d = dict(sorted(d.items()))
-    return tuple(d.values())
+    return d
 
 for each in tqdm.tqdm(file_buffer):
     if each:
         line = json.loads(each)
-        fullfiled = { **fullfill,**line}
-        print(fullfiled)
+        fullfiled = restructure({ **fullfill,**line})
         data_ch = [{x:y} for x,y in fullfiled.items()]
         client.execute(
                         'INSERT INTO Dbreport.RawData {} VALUES'.format(string_cols),
