@@ -1,0 +1,66 @@
+# -*- coding: utf-8 -*-
+"""
+Created on Mon Apr 27 11:12:35 2020
+
+@author: aovch
+"""
+
+CREATE TABLE Dbreport.RawData (
+  artist  String,
+  auth  String,
+  firstName  String,
+  gender  String,
+  itemInSession  UInt8,
+  lastName  String,
+  length  Float32,
+  level  String,
+  location  String,
+  method  String,
+  page  String,
+  registration  Int32,
+  sessionId  Int32,
+  song  String,
+  status  UInt8,
+  ts  UInt64,
+  userAgent  String,
+  userId  String
+) ENGINE = MergeTree()
+ORDER BY ts
+
+--выбран движок mergetree для быстрого инсерта
+
+
+CREATE TABLE Dbreport.DateData (
+  artist  String,
+  auth  String,
+  firstName  String,
+  gender  String,
+  itemInSession  UInt8,
+  lastName  String,
+  length  Float32,
+  level  String,
+  location  String,
+  method  String,
+  page  String,
+  registration  Int32,
+  sessionId  Int32,
+  song  String,
+  status  UInt8,
+  CreatedOn DateTime,
+  EventDate Date,
+  YearWeek Uint8,
+  YearMonth UInt8,
+  userAgent  String,
+  userId  String
+) ENGINE = AggregatingMergeTree()
+ORDER BY (YearWeek,EventDate)
+PARTITION BY YearMonth 
+
+--выбран движок AggregatingMergeTree - из-за предподготовленной агрегации значений, 
+для быстрого агрегирования по параметрам;
+добавлены поля timestamp, date и месяц, неделя - для работы с датами ;
+Индекс на неделе и дата для удобства работы:
+Индекс на неделю если нужен недельный отчет.
+Партиция на месяц - для ускорения месячных отчетов. 
+--
+дальнейшая оптимизация возможна засчет добавления словарей. 
